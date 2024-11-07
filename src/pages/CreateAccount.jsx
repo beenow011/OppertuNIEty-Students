@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connectWallet } from "../utils/connectWallet";
 import axios from "axios";
 import { useWeb3Context } from "../context/useWeb3Context";
+import { Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function CreateAccount() {
   const { updateWeb3State, Web3State } = useWeb3Context();
+  const { selectedAccount, setSelectedAccount } = Web3State;
   const [walletConnected, setWalletConnected] = useState(false);
   const [selectedAccountFromWallet, setSelectedAccountFromWallet] =
     useState(null);
   const [signatureFromWallet, setSignatureFromWallet] = useState(null);
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const navigate = useNavigate();
   const [studentData, setStudentData] = useState({
     name: "",
     usn: "",
@@ -16,6 +22,9 @@ function CreateAccount() {
     graduationYear: "",
   });
 
+  useEffect(() => {
+    if (selectedAccount) navigate("/dashboard");
+  }, [selectedAccount, navigate]);
   const handleConnectWallet = async () => {
     try {
       const { selectedAccount, signature } = await connectWallet();
@@ -24,6 +33,7 @@ function CreateAccount() {
       setSignatureFromWallet(signature);
     } catch (error) {
       console.error(error);
+      toast.error("Error connecting to wallet");
     }
   };
 
@@ -39,20 +49,28 @@ function CreateAccount() {
     e.preventDefault();
     await createAccount();
   };
-
+  console.log(signatureFromWallet);
   const createAccount = async () => {
+    setSubmitLoading(true);
     try {
       const res = await axios.post(
         `http://localhost:3000/api/student-auth/create-account?address=${selectedAccountFromWallet}`,
-        { studentData, signatureFromWallet }
+        { ...studentData, signature: signatureFromWallet }
       );
       if (res.status === 200) {
         console.log(res.data);
         localStorage.setItem("token", res.data.token);
-        updateWeb3State({ selectedAccount, signature });
+        updateWeb3State({
+          selectedAccount: selectedAccountFromWallet,
+          signature: signatureFromWallet,
+        });
+        navigate("/dashboard");
       }
     } catch (err) {
       console.error(err);
+      toast.error("Error creating account");
+    } finally {
+      setSubmitLoading(false);
     }
   };
 
@@ -67,7 +85,9 @@ function CreateAccount() {
         </p>
         <button
           onClick={handleConnectWallet}
-          className="bg-primary text-dark-blue px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition duration-300"
+          className={`${
+            walletConnected ? "bg-green-500" : "bg-primary"
+          } text-dark-blue px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition duration-300`}
         >
           {walletConnected ? "Wallet Connected" : "Connect MetaMask"}
         </button>
@@ -148,8 +168,13 @@ function CreateAccount() {
           <button
             type="submit"
             className="p-3 bg-blue-600 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
+            disabled={submitLoading}
           >
-            Create Account
+            {submitLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              "Create Account"
+            )}
           </button>
         </form>
       </section>
