@@ -6,6 +6,7 @@ import { Layout } from "../Layout/Layout";
 import CreateAccount from "../pages/CreateAccount";
 import Dashboard from "../pages/Dashboard";
 import CompleteSignup from "../pages/CompleteSignup";
+import Profile from "../pages/Profile";
 
 export const BrowserRouter = createBrowserRouter([
   {
@@ -15,6 +16,7 @@ export const BrowserRouter = createBrowserRouter([
       { path: "/create-account", element: <CreateAccount /> },
       { path: "/dashboard", element: <Dashboard /> },
       { path: "/complete-signup", element: <CompleteSignup /> },
+      { path: "/profile", element: <Profile /> },
     ],
   },
 ]);

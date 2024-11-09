@@ -1,13 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LogIn, UserPlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { connectWallet } from "../utils/connectWallet";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { useWeb3Context } from "../context/useWeb3Context";
 
 function AccountCheck() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const { updateWeb3State, Web3State } = useWeb3Context();
+  const { selectedAccount } = Web3State;
+
+  useEffect(() => {
+    if (selectedAccount) {
+      navigate("/dashboard");
+    }
+  }, [selectedAccount, navigate]);
 
   const handlelogin = async () => {
     try {

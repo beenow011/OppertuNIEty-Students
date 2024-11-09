@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useWeb3Context } from "../context/useWeb3Context";
+import { User, Layers, Star, BookOpen, Mail, LogOut } from "lucide-react";
 
 function Header() {
   const navigate = useNavigate();
@@ -16,49 +17,62 @@ function Header() {
 
     navigate("/");
   };
+
   return (
-    <header className="bg-dark-blue text-white shadow-lg p-4">
+    <header className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white shadow-lg p-4">
       <div className="container mx-auto flex justify-between items-center">
+        {/* Logo */}
         <div
-          className="text-2xl font-bold tracking-wider flex items-center"
+          className="text-3xl font-extrabold tracking-wider flex items-center cursor-pointer"
           onClick={() => navigate("/")}
         >
-          <h1 className=" font-extrabold cursor-pointer">
-            <span className="text-slate-400">Opportu</span>
+          <h1>
+            <span className="text-gray-300">Opportu</span>
             <span className="text-blue-500">NIE</span>
-            <span className="text-slate-400">ty</span>
+            <span className="text-gray-300">ty</span>
           </h1>
         </div>
+
+        {/* Navigation Links */}
         {selectedAccount && (
-          <nav className="flex space-x-8">
+          <nav className="flex items-center space-x-6 text-lg">
+            <a
+              href="/profile"
+              className="flex items-center gap-2 hover:text-blue-400 transition duration-200 ease-in-out"
+            >
+              <User className="w-5 h-5" />
+            </a>
             <a
               href="#overview"
-              className="hover:text-primary transition duration-200"
+              className="flex items-center gap-2 hover:text-blue-400 transition duration-200 ease-in-out"
             >
-              Overview
+              <Layers className="w-5 h-5" />
             </a>
             <a
               href="#features"
-              className="hover:text-primary transition duration-200"
+              className="flex items-center gap-2 hover:text-blue-400 transition duration-200 ease-in-out"
             >
-              Features
+              <Star className="w-5 h-5" />
             </a>
             <a
               href="#resources"
-              className="hover:text-primary transition duration-200"
+              className="flex items-center gap-2 hover:text-blue-400 transition duration-200 ease-in-out"
             >
-              Resources
+              <BookOpen className="w-5 h-5" />
             </a>
             <a
               href="#contact"
-              className="hover:text-primary transition duration-200"
+              className="flex items-center gap-2 hover:text-blue-400 transition duration-200 ease-in-out"
             >
-              Contact
+              <Mail className="w-5 h-5" />
             </a>
+
+            {/* Logout Button */}
             <button
               onClick={handlelogout}
-              className="bg-primary hover:bg-blue-600 text-dark-blue px-8 py-3 text-lg font-semibold rounded-full transition duration-300"
+              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold transition duration-300 ease-in-out shadow-md"
             >
+              <LogOut className="w-5 h-5" />
               Logout
             </button>
           </nav>
