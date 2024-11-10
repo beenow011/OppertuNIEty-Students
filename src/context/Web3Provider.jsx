@@ -6,11 +6,18 @@ const Web3Provider = ({ children }) => {
     selectedAccount: null,
     signature: null,
   });
+  const [StudentState, setStudentState] = useState({
+    name: null,
+    branch: null,
+    usn: null,
+  });
   const updateWeb3State = (newState) => {
     setWeb3State((prevState) => ({ ...prevState, ...newState }));
   };
   return (
-    <Web3Context.Provider value={{ Web3State, updateWeb3State }}>
+    <Web3Context.Provider
+      value={{ Web3State, updateWeb3State, StudentState, setStudentState }}
+    >
       {children}
     </Web3Context.Provider>
   );

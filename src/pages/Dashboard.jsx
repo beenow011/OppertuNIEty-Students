@@ -1,11 +1,13 @@
 import React from "react";
 import { Briefcase, CheckCircle, Rocket, Star } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const userName = "Abhinav"; // Placeholder for the user’s name, which can be dynamic if fetched
+  const navigate = useNavigate();
 
   return (
-    <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white min-h-screen p-8">
+    <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white min-h-screen px-52 p-8">
       {/* Greeting Message */}
       <div className="text-3xl font-bold mb-6">
         <h1>
@@ -33,7 +35,7 @@ function Dashboard() {
         {/* Apply to Companies Section */}
         <div
           className="bg-gray-800 rounded-lg p-6 flex flex-col items-center text-center hover:bg-gray-700 transition duration-200 ease-in-out cursor-pointer shadow-lg"
-          onClick={() => alert("Navigating to Apply to Companies")}
+          onClick={() => navigate("/apply-company-list")}
         >
           <Briefcase className="w-12 h-12 text-green-500 mb-4" />
           <h2 className="text-xl font-semibold">Apply to Companies</h2>

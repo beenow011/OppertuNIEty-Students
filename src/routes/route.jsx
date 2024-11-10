@@ -7,6 +7,8 @@ import CreateAccount from "../pages/CreateAccount";
 import Dashboard from "../pages/Dashboard";
 import CompleteSignup from "../pages/CompleteSignup";
 import Profile from "../pages/Profile";
+import ApplyCompanyList from "../pages/ApplyCompanyList";
+import CompanyPage from "../pages/CompanyPage";
 
 export const BrowserRouter = createBrowserRouter([
   {
@@ -17,6 +19,8 @@ export const BrowserRouter = createBrowserRouter([
       { path: "/dashboard", element: <Dashboard /> },
       { path: "/complete-signup", element: <CompleteSignup /> },
       { path: "/profile", element: <Profile /> },
+      { path: "/apply-company-list", element: <ApplyCompanyList /> },
+      { path: "/apply-company-list/:id", element: <CompanyPage /> },
     ],
   },
 ]);

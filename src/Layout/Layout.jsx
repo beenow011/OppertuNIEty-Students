@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Header from "../comp/Header";
 import DocumentsReq from "../comp/DocumentsReq";
+import { useWeb3Context } from "../context/useWeb3Context";
 
 // Layout component that includes Header
 export const Layout = ({ children }) => (
