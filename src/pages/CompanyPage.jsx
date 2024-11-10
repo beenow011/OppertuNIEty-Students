@@ -7,6 +7,7 @@ import { getContractInstance } from "../utils/getContractInstance";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import EligibilityDisplay from "../comp/EligibiltyNote";
+import { CheckCircle } from "lucide-react";
 
 function CompanyPage() {
   const { Web3State } = useWeb3Context();
@@ -167,6 +168,7 @@ function CompanyPage() {
     if (selectedAccount) {
       getCompany();
       studentData();
+      getApplicationStatus();
     }
   }, [selectedAccount]);
   const [
@@ -179,6 +181,44 @@ function CompanyPage() {
     email,
     coreSkills,
   ] = user;
+  const [applyLoading, setApplyLoading] = useState(false);
+  const [applied, setApplied] = useState(false);
+
+  const getApplicationStatus = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:3000/api/companies/get-application-status?address=${selectedAccount}&companyId=${id}`
+      );
+      console.log(res);
+      setApplied(res.data.applied);
+    } catch (e) {
+      console.log(e);
+      toast.error("Error fetching application status");
+    }
+  };
+
+  const handleApply = async () => {
+    try {
+      setApplyLoading(true);
+      const percentageMatch = eligibilityNote?.match(/(\d+)%/);
+      const percentage = percentageMatch ? parseInt(percentageMatch[1], 10) : 0;
+
+      const res = await axios.post(
+        "http://localhost:3000/api/companies/apply?address=" + selectedAccount,
+        {
+          companyId: id,
+          eligibilityScore: percentage,
+        }
+      );
+      console.log(res);
+      setApplied(true);
+    } catch (e) {
+      console.log(e);
+      toast.error("Error applying to company");
+    } finally {
+      setApplyLoading(false);
+    }
+  };
   if (!company) {
     return (
       <div className="text-white text-center">Loading company details...</div>
@@ -204,25 +244,38 @@ function CompanyPage() {
             </p>
           </div>
         </div>
-        <div className="flex gap-2 items-start mt-5">
-          <button
-            class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-300 ease-in-out"
-            disabled={!eligibility}
-          >
-            Apply
-          </button>
-          <button
-            class="px-6 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-300 ease-in-out"
-            onClick={handleEligibility}
-          >
-            Check Eligibility
-          </button>
-        </div>
-        <div>
+        <div className="flex flex-col md:flex-row items-center h-36 justify-between">
+          <div className="flex gap-2 items-start mt-5">
+            {applied ? (
+              <div className="flex gap-2 items-center">
+                <span className="text-gray-300">Applied</span>
+                <CheckCircle className="text-green-500 w-6 h-6" />
+              </div>
+            ) : eligibility ? (
+              <button
+                className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-300 ease-in-out"
+                disabled={applyLoading}
+                onClick={handleApply}
+              >
+                {applyLoading ? "Applying..." : "Apply"}
+              </button>
+            ) : (
+              <button
+                className="px-6 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-300 ease-in-out"
+                onClick={handleEligibility}
+              >
+                Check Eligibility
+              </button>
+            )}
+          </div>
+
           {eligibilityNote && (
-            <EligibilityDisplay eligibilityNote={eligibilityNote} />
+            <div className="mt-4">
+              <EligibilityDisplay eligibilityNote={eligibilityNote} />
+            </div>
           )}
         </div>
+
         <div className="border-t border-gray-600 pt-6 mt-4">
           <h3 className="text-lg font-semibold mb-4 text-[#E94560]">
             Job Details
