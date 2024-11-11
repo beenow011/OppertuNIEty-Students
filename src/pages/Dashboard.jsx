@@ -23,7 +23,7 @@ function Dashboard() {
         {/* Applied Companies Section */}
         <div
           className="bg-gray-800 rounded-lg p-6 flex flex-col items-center text-center hover:bg-gray-700 transition duration-200 ease-in-out cursor-pointer shadow-lg"
-          onClick={() => alert("Navigating to Applied Companies")}
+          onClick={() => navigate("/applied-companies")}
         >
           <CheckCircle className="w-12 h-12 text-blue-500 mb-4" />
           <h2 className="text-xl font-semibold">View Applied Companies</h2>
