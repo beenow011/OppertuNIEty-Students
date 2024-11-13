@@ -6,7 +6,7 @@ import contractAbi from "../constants/contractAbi.json";
 export const getContractInstance = async () => {
     try {
 
-        const contractAddress = "0x4060b27703257a6E415Df7c56432E948708E6E9a"
+        const contractAddress = "0xBE619fD3D415a5cEbd817014BAABdbBed0C688e2"
         const provider = new ethers.BrowserProvider(window.ethereum);
         const signer = await provider.getSigner();
         const contractInstance = new ethers.Contract(contractAddress, contractAbi, signer);

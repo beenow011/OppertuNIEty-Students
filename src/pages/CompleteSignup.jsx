@@ -11,6 +11,7 @@ function CompleteSignup() {
   const [file, setFile] = useState(null);
   const { selectedAccount, setSelectedAccount } = Web3State;
   const [resume, setResume] = useState(null);
+  const [resumeLoading, setResumeLoading] = useState(false);
   const navigate = useNavigate();
   const [aiLoading, setAiLoading] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
@@ -78,9 +79,10 @@ function CompleteSignup() {
       );
       if (res.data.resumeCollected) {
         setIsResumeUploaded(true);
+        console.log("Resume already uploaded");
         const contract = await getContractInstance();
         const tx = await contract.viewResume();
-        console.log("tx", tx);
+        console.log("tx1", tx);
         await getResume(tx);
       }
     } catch (err) {
@@ -102,6 +104,7 @@ function CompleteSignup() {
 
   const handleResumeUpload = async () => {
     try {
+      setResumeLoading(true);
       if (file) {
         const formDataInstance = new FormData();
         formDataInstance.append("file", file);
@@ -127,6 +130,8 @@ function CompleteSignup() {
     } catch (err) {
       console.log(err);
       toast.error("Error uploading resume");
+    } finally {
+      setResumeLoading(false);
     }
   };
 
@@ -246,9 +251,10 @@ function CompleteSignup() {
             <button
               type="button"
               onClick={handleResumeUpload}
+              disabled={resumeLoading}
               className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
             >
-              Add Resume
+              {resumeLoading ? <Loader2 className="animate-spin" /> : "Upload"}
             </button>
           </div>
         ) : (
