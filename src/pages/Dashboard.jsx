@@ -1,9 +1,13 @@
 import React from "react";
 import { Briefcase, CheckCircle, Rocket, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useWeb3Context } from "../context/useWeb3Context";
 
 function Dashboard() {
-  const userName = "Abhinav"; // Placeholder for the user’s name, which can be dynamic if fetched
+  const { StudentState } = useWeb3Context();
+
+  const { name: userName } = StudentState;
+  // const userName = "Abhinav"; // Placeholder for the user’s name, which can be dynamic if fetched
   const navigate = useNavigate();
 
   return (

@@ -39,7 +39,7 @@ function ApplyCompanyList() {
           Active Companies
         </h2>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {companies.map((company) => (
+          {[...companies].reverse().map((company) => (
             <div
               key={company.companyName}
               className="bg-gray-800 rounded-lg shadow-md overflow-hidden transform transition-transform hover:scale-105"

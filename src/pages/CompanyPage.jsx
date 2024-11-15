@@ -247,9 +247,17 @@ function CompanyPage() {
         <div className="flex flex-col md:flex-row items-center h-36 justify-between">
           <div className="flex gap-2 items-start mt-5">
             {applied ? (
-              <div className="flex gap-2 items-center">
-                <span className="text-gray-300">Applied</span>
-                <CheckCircle className="text-green-500 w-6 h-6" />
+              <div className="flex gap-4">
+                <div className="flex gap-2 items-center">
+                  <span className="text-gray-300">Applied</span>
+                  <CheckCircle className="text-green-500 w-6 h-6" />
+                </div>
+                <button
+                  className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-300 ease-in-out"
+                  onClick={() => navigate("/prepare/" + id)}
+                >
+                  Prepare
+                </button>
               </div>
             ) : eligibility ? (
               <button
