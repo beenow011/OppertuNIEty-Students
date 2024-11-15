@@ -137,6 +137,7 @@ function CompleteSignup() {
 
   const handleSubmit = async (e) => {
     try {
+      setSubmitLoading(true);
       e.preventDefault();
       // Handle form submission logic here (e.g., sending data to backend)
       const contract = await getContractInstance();
