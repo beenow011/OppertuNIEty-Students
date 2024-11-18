@@ -3,12 +3,14 @@ import { useParams } from "react-router-dom";
 import { useWeb3Context } from "../context/useWeb3Context";
 import { Book, HelpCircle, UserCheck, Users } from "lucide-react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function PrepareCompany() {
   const { id } = useParams();
   const { Web3State } = useWeb3Context();
   const { selectedAccount } = Web3State;
   const [company, setCompany] = useState();
+  const navigate = useNavigate();
 
   const getCompany = async () => {
     try {
@@ -86,7 +88,10 @@ function PrepareCompany() {
         </button>
 
         {/* Study Materials */}
-        <button className="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3 px-4 rounded-lg shadow-md flex items-center justify-center space-x-2">
+        <button
+          className="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3 px-4 rounded-lg shadow-md flex items-center justify-center space-x-2"
+          onClick={() => navigate(`/study-material/${id}`)}
+        >
           <Book className="w-6 h-6" />
           <span>Study Materials</span>
         </button>

@@ -11,6 +11,7 @@ import ApplyCompanyList from "../pages/ApplyCompanyList";
 import CompanyPage from "../pages/CompanyPage";
 import AppliedCompanied from "../pages/AppliedCompanies";
 import PrepareCompany from "../pages/PrepareCompany";
+import StudyMaterial from "../pages/StudyMaterial";
 
 export const BrowserRouter = createBrowserRouter([
   {
@@ -25,6 +26,8 @@ export const BrowserRouter = createBrowserRouter([
       { path: "/apply-company-list/:id", element: <CompanyPage /> },
       { path: "/applied-companies", element: <AppliedCompanied /> },
       { path: "/prepare/:id", element: <PrepareCompany /> },
+      { path: "/company/:id", element: <CompanyPage /> },
+      { path: "study-material/:id", element: <StudyMaterial /> },
     ],
   },
 ]);

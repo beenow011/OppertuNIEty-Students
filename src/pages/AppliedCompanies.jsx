@@ -9,12 +9,14 @@ import {
 import toast from "react-hot-toast";
 import { useWeb3Context } from "../context/useWeb3Context";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function AppliedCompanies() {
   const { Web3State } = useWeb3Context();
   const { selectedAccount } = Web3State;
   const [appliedCompanies, setAppliedCompanies] = useState([]);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const getAppliedCompanies = async () => {
     try {
@@ -74,6 +76,7 @@ function AppliedCompanies() {
           <div
             key={application._id}
             className="bg-slate-800 border border-slate-700 rounded-lg overflow-hidden shadow-lg"
+            onClick={() => navigate(`/company/${application.companyId._id}`)}
           >
             <div className="p-6">
               <div className="flex items-start justify-between mb-4">
