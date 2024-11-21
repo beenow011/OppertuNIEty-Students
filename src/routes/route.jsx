@@ -12,6 +12,7 @@ import CompanyPage from "../pages/CompanyPage";
 import AppliedCompanied from "../pages/AppliedCompanies";
 import PrepareCompany from "../pages/PrepareCompany";
 import StudyMaterial from "../pages/StudyMaterial";
+import Faq from "../pages/Faq";
 
 export const BrowserRouter = createBrowserRouter([
   {
@@ -28,6 +29,7 @@ export const BrowserRouter = createBrowserRouter([
       { path: "/prepare/:id", element: <PrepareCompany /> },
       { path: "/company/:id", element: <CompanyPage /> },
       { path: "study-material/:id", element: <StudyMaterial /> },
+      { path: "/faq/:id", element: <Faq /> },
     ],
   },
 ]);

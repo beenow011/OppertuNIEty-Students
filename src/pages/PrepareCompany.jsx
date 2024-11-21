@@ -76,7 +76,10 @@ function PrepareCompany() {
         </button>
 
         {/* Most Asked Questions */}
-        <button className="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-lg shadow-md flex items-center justify-center space-x-2">
+        <button
+          className="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-lg shadow-md flex items-center justify-center space-x-2"
+          onClick={() => navigate(`/faq/${id}`)}
+        >
           <HelpCircle className="w-6 h-6" />
           <span>Most Asked Questions</span>
         </button>
