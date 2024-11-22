@@ -48,6 +48,7 @@ function FaqQuestions() {
   const handleAnswer = async (question) => {
     try {
       setIsLoading(true);
+      console.log("Question:", question);
       setAnswersByAI({ question, answer: "" });
       const res = await axios.post(
         "http://localhost:3000/api/openai/get-answer",
@@ -83,64 +84,107 @@ function FaqQuestions() {
   };
 
   return (
-    <div className="p-6 bg-gray-900 text-white rounded-md shadow-lg max-w-7xl mx-auto mt-10 grid grid-cols-1 lg:grid-cols-2 gap-6 h-screen">
-      <div className="overflow-scroll">
-        <h1 className="text-3xl font-bold mb-6 text-green-400">
-          Frequently Asked Questions
+    <div className="p-4 md:p-6 bg-gray-900 text-white min-h-screen">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <h1 className="text-2xl md:text-3xl font-bold mb-8 text-green-400 text-center">
+          Interactive FAQ Assistant
         </h1>
-        {questions.length === 0 ? (
-          <p className="text-gray-400">No questions available for this ID.</p>
-        ) : (
-          <div className="space-y-6">
-            {questions.map((item, index) => (
-              <div
-                key={index}
-                className="border-b border-gray-700 pb-4 mb-4 space-y-2"
-              >
-                <h2 className="text-xl font-semibold text-green-400">
-                  {item.round} Round
-                </h2>
-                <ul className="space-y-2">
-                  {item.questions.split(/[.?]/).map((question, index) => (
-                    <li
-                      key={index}
-                      className="flex items-center justify-between text-gray-300"
-                    >
-                      {question.trim()}
-                      <button
-                        className="bg-gradient-to-r p-2 rounded-full group relative from-pink-500 to-purple-500"
-                        onClick={() => handleAnswer(question.trim())}
-                        disabled={isLoading}
-                      >
-                        <GemIcon className="h-5 w-5 text-white" />
-                        <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 text-sm bg-gray-800 text-white py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          Get answer via AI
-                        </span>
-                      </button>
-                    </li>
-                  ))}
-                </ul>
+
+        <div className="flex flex-col-reverse  lg:flex-row gap-6">
+          {/* Questions Panel */}
+          <div className="bg-gray-800/50 rounded-xl p-4 md:p-6 backdrop-blur-sm flex-1">
+            {questions.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-48 text-gray-400">
+                <GemIcon className="h-12 w-12 mb-4 opacity-50" />
+                <p>No questions available for this ID.</p>
               </div>
-            ))}
+            ) : (
+              <div className="space-y-6">
+                {questions.map((item, index) => (
+                  <div
+                    key={index}
+                    className="group rounded-lg bg-gray-800/40 p-4 transition-all duration-200 hover:bg-gray-800/60"
+                  >
+                    <h2 className="text-lg md:text-xl font-semibold text-green-400 mb-3 flex items-center gap-2">
+                      <span className="inline-block w-2 h-2 rounded-full bg-green-400"></span>
+                      {item.round} Round
+                    </h2>
+                    <ul className="space-y-3">
+                      {item.questions.split(/[.?]/).map((question, qIndex) => {
+                        const trimmedQuestion = question.trim();
+                        if (!trimmedQuestion) return null;
+
+                        return (
+                          <li
+                            key={qIndex}
+                            className="flex items-start justify-between gap-4 text-gray-300 hover:text-white transition-colors group/item"
+                          >
+                            <span className="text-sm md:text-base">
+                              {trimmedQuestion}?
+                            </span>
+                            <button
+                              className="shrink-0 mt-1 p-2 rounded-full transition-all duration-300 hover:scale-110 
+                                       bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 
+                                       opacity-0 group-hover/item:opacity-100"
+                              onClick={() => handleAnswer(trimmedQuestion)}
+                              disabled={isLoading}
+                            >
+                              <GemIcon
+                                className={`h-4 w-4 text-white ${
+                                  isLoading ? "animate-pulse" : ""
+                                }`}
+                              />
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
-        )}
-      </div>
-      <div className="p-6 bg-gray-800 text-white rounded-lg shadow-md ">
-        <h2 className="text-2xl font-bold mb-4 text-green-400">
-          AI Generated Answer
-        </h2>
-        {isLoading ? (
-          <div className="flex items-center justify-center space-x-2">
-            <Loader2 className="h-6 w-6 animate-spin text-green-400" />
-            <span>Loading...</span>
+
+          {/* Answer Panel */}
+          <div className="lg:sticky lg:top-6 h-fit flex-1">
+            <div className="bg-gray-800 rounded-xl p-4 md:p-6 shadow-xl">
+              <h2 className="text-xl md:text-2xl font-bold mb-6 text-green-400 flex items-center gap-3">
+                <GemIcon
+                  className={`h-6 w-6 ${
+                    isLoading
+                      ? "animate-spin text-purple-500"
+                      : "text-green-400"
+                  }`}
+                />
+                AI Generated Answer
+              </h2>
+
+              <div className="min-h-[200px]">
+                {isLoading ? (
+                  <div className="flex flex-col items-center justify-center space-y-4 h-40">
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full animate-pulse"></div>
+                      <GemIcon className="h-8 w-8 text-white relative animate-bounce" />
+                    </div>
+                    <span className="text-gray-400">Generating answer...</span>
+                  </div>
+                ) : answersByAi.answer ? (
+                  <div className="prose prose-invert max-w-none">
+                    <ReactMarkdown components={components}>
+                      {answersByAi.answer}
+                    </ReactMarkdown>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-40 text-gray-400">
+                    <GemIcon className="h-8 w-8 mb-3 opacity-50" />
+                    <p>Select a question to see the AI-generated answer</p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
-        ) : answersByAi.answer ? (
-          <ReactMarkdown components={components} className="prose prose-invert">
-            {answersByAi.answer}
-          </ReactMarkdown>
-        ) : (
-          <p className="text-gray-400">Select a question to see the answer.</p>
-        )}
+        </div>
       </div>
     </div>
   );
