@@ -13,6 +13,8 @@ import AppliedCompanied from "../pages/AppliedCompanies";
 import PrepareCompany from "../pages/PrepareCompany";
 import StudyMaterial from "../pages/StudyMaterial";
 import Faq from "../pages/Faq";
+import MockInterview from "../pages/MockInterview";
+import InterviewPage from "../pages/interviewPage";
 
 export const BrowserRouter = createBrowserRouter([
   {
@@ -30,6 +32,8 @@ export const BrowserRouter = createBrowserRouter([
       { path: "/company/:id", element: <CompanyPage /> },
       { path: "study-material/:id", element: <StudyMaterial /> },
       { path: "/faq/:id", element: <Faq /> },
+      { path: "/mock-interview/:id", element: <MockInterview /> },
+      { path: "/mock-interview/:type/:id", element: <InterviewPage /> },
     ],
   },
 ]);
