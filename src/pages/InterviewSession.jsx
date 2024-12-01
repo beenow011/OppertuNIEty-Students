@@ -182,6 +182,11 @@ function InterviewSession() {
     }
 
     const utterance = new SpeechSynthesisUtterance(message);
+    const voices = synth.getVoices();
+    utterance.voice = voices.find(
+      //i need a realistic voice, Google UK English is not that realistic?
+      (voice) => voice.name === "Google US English"
+    );
     utterance.onend = () => setIsSpeaking(false);
     setIsSpeaking(true);
     synth.speak(utterance);

@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { useWeb3Context } from "../context/useWeb3Context";
 import { getContractInstance } from "../utils/getContractInstance";
-import { Loader2, PlusCircle, X, Check } from "lucide-react";
+import { Loader2, PlusCircle, X, Check, Ghost } from "lucide-react";
 
 function InterviewPage() {
   const { id, type } = useParams();
@@ -97,6 +97,15 @@ function InterviewPage() {
 
     fetchSessions();
   }, [id, type, selectedAccount]);
+
+  if (type === "group-discussion") {
+    return (
+      <div className="min-h-screen bg-gray-900 text-white flex flex-col  items-center p-36">
+        <Ghost size={64} className="mx-auto text-blue-500" />
+        this section is yet to be implemented..
+      </div>
+    );
+  }
 
   // Skills Modal Component
   const SkillsModal = () => (
