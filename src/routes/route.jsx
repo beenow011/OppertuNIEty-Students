@@ -16,6 +16,8 @@ import Faq from "../pages/Faq";
 import MockInterview from "../pages/MockInterview";
 import InterviewPage from "../pages/interviewPage";
 import InterviewSession from "../pages/InterviewSession";
+import AllContest from "../pages/AllContest";
+import ContestPage from "../pages/ContestPage";
 
 export const BrowserRouter = createBrowserRouter([
   {
@@ -39,6 +41,8 @@ export const BrowserRouter = createBrowserRouter([
         path: "/interview/:type/:id",
         element: <InterviewSession />,
       },
+      { path: "/all-contest", element: <AllContest /> },
+      { path: "/contest/:id", element: <ContestPage /> },
     ],
   },
 ]);

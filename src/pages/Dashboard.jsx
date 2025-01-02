@@ -1,5 +1,5 @@
 import React from "react";
-import { Briefcase, CheckCircle, Rocket, Star } from "lucide-react";
+import { Briefcase, CheckCircle, Gamepad, Rocket, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useWeb3Context } from "../context/useWeb3Context";
 
@@ -33,6 +33,16 @@ function Dashboard() {
           <h2 className="text-xl font-semibold">View Applied Companies</h2>
           <p className="text-gray-400 mt-2">
             Check the status of your applications and manage them easily.
+          </p>
+        </div>
+        <div
+          className="bg-gray-800 rounded-lg p-6 flex flex-col items-center text-center hover:bg-gray-700 transition duration-200 ease-in-out cursor-pointer shadow-lg"
+          onClick={() => navigate("/all-contest")}
+        >
+          <Gamepad className="w-12 h-12 text-blue-500 mb-4" />
+          <h2 className="text-xl font-semibold">View Contests</h2>
+          <p className="text-gray-400 mt-2">
+            Check all the active contests and participate in them.
           </p>
         </div>
 
