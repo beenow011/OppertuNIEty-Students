@@ -49,7 +49,8 @@ function AllContest() {
       // toast.success(`Opening ${contest.contestName}`);
       navigate(`/contest/${contest._id}`);
     } else {
-      toast.error(`Contest ${contest.contestName} is inactive`);
+      // toast.error(`Contest ${contest.contestName} is inactive`);
+      navigate(`/completed-contest/${contest._id}`);
     }
     // Add your navigation logic here
   };

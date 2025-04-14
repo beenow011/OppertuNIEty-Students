@@ -1,9 +1,25 @@
 import React from "react";
-import { getContractInstance } from "../utils/getContractInstance";
-import { User, Phone, Mail, GraduationCap, Settings, Cake } from "lucide-react";
+import {
+  getContractInstance,
+  getNFTContractInstance,
+} from "../utils/getContractInstance";
+import {
+  User,
+  Phone,
+  Mail,
+  GraduationCap,
+  Settings,
+  Cake,
+  Trophy,
+  Sparkles,
+} from "lucide-react";
+import { useWeb3Context } from "../context/useWeb3Context";
 
 function Profile() {
   const [user, setUser] = React.useState(null);
+  const { Web3State } = useWeb3Context();
+  const { selectedAccount } = Web3State;
+  const [balanceNFT, setBalanceNFT] = React.useState(0);
 
   const getUser = async () => {
     try {
@@ -15,14 +31,33 @@ function Profile() {
     }
   };
 
+  const getNftBalance = async () => {
+    try {
+      const contract = await getNFTContractInstance();
+      const balance = await contract.balanceOfNFT(selectedAccount);
+      setBalanceNFT(balance);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   React.useEffect(() => {
     getUser();
   }, []);
 
+  React.useEffect(() => {
+    if (selectedAccount) {
+      getNftBalance();
+    }
+  }, [selectedAccount]);
+
   if (!user) {
     return (
       <div className="flex items-center justify-center h-screen text-gray-400">
-        Loading...
+        <div className="animate-pulse flex flex-col items-center">
+          <div className="w-16 h-16 bg-gray-700 rounded-full mb-4"></div>
+          <div className="text-lg">Loading profile...</div>
+        </div>
       </div>
     );
   }
@@ -39,77 +74,120 @@ function Profile() {
   ] = user;
 
   return (
-    <div className="flex flex-col items-center p-6 bg-gradient-to-br from-gray-900 to-gray-800 min-h-screen text-gray-100">
-      <h1 className="text-4xl font-bold mb-8 text-blue-500">User Profile</h1>
-
-      <div className="w-full max-w-2xl bg-gray-900 rounded-lg shadow-lg p-8 space-y-8">
-        {/* Personal Information */}
-        <div className="border-b border-gray-700 pb-6">
-          <h2 className="text-2xl font-semibold flex items-center text-blue-300">
-            <User className="mr-3 text-xl" /> {name}
-          </h2>
-          <p className="text-gray-400 mt-2">Software Developer & Engineer</p>
-        </div>
-
-        {/* Academic Information */}
-        <div className="space-y-4">
-          <h3 className="text-xl font-semibold text-blue-400">
-            Academic Information
-          </h3>
-          <div className="flex justify-between">
-            <p className="text-gray-300">
-              <strong>10th Percentage:</strong> {xPercentage}%
-            </p>
-            <p className="text-gray-300">
-              <strong>12th Percentage:</strong> {xiiPercentage}%
-            </p>
-            <p className="text-gray-300">
-              <strong>CGPA:</strong> {cgpa}
-            </p>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-blue-900 p-8">
+      <div className="max-w-4xl mx-auto">
+        {/* NFT Balance Card */}
+        <div className="bg-gradient-to-r from-purple-900/50 to-blue-900/50 rounded-xl p-6 mb-8 backdrop-blur-sm border border-purple-500/20">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 bg-purple-500/20 rounded-lg">
+                <Trophy className="w-8 h-8 text-purple-400" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-purple-300">
+                  NFT Collection
+                </h2>
+                <p className="text-purple-200/80">Your Achievement Tokens</p>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-3xl font-bold text-purple-300">
+                {balanceNFT.toString()}
+              </div>
+              <p className="text-purple-200/80">Total NFTs</p>
+            </div>
           </div>
         </div>
 
-        {/* Contact Information */}
-        <div className="space-y-4">
-          <h3 className="text-xl font-semibold text-blue-400">
-            Contact Information
-          </h3>
-          <div className="flex items-center space-x-2 text-gray-300">
-            <Cake className="text-blue-300" />
-            <span>
-              <strong>Date of Birth:</strong> {dob}
-            </span>
+        {/* Profile Card */}
+        <div className="bg-gray-900/80 backdrop-blur-sm rounded-xl shadow-2xl overflow-hidden border border-gray-700">
+          {/* Header Section */}
+          <div className="relative h-32 bg-gradient-to-r from-blue-600 to-purple-600">
+            <div className="absolute -bottom-16 left-8">
+              <div className="p-1 bg-gray-900 rounded-full">
+                <div className="w-24 h-24 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full flex items-center justify-center">
+                  <User className="w-12 h-12 text-white" />
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center space-x-2 text-gray-300">
-            <Phone className="text-blue-300" />
-            <span>
-              <strong>Phone:</strong> {phone}
-            </span>
-          </div>
-          <div className="flex items-center space-x-2 text-gray-300">
-            <Mail className="text-blue-300" />
-            <span>
-              <strong>Email:</strong> {email}
-            </span>
-          </div>
-        </div>
 
-        {/* Core Skills */}
-        <div className="space-y-4">
-          <h3 className="text-xl font-semibold text-blue-400 flex items-center">
-            <Settings className="mr-2" /> Core Skills
-          </h3>
-          <ul className="grid grid-cols-2 gap-2 text-gray-300">
-            {coreSkills &&
-              coreSkills.map((skill, index) => (
-                <li
-                  key={index}
-                  className="bg-gray-800 rounded-md py-1 px-3 text-center text-sm shadow-md"
-                >
-                  {skill}
-                </li>
-              ))}
-          </ul>
+          <div className="pt-20 px-8 pb-8">
+            {/* Personal Information */}
+            <div className="border-b border-gray-700 pb-6">
+              <h2 className="text-3xl font-bold text-white flex items-center">
+                {name}
+                <Sparkles className="ml-2 w-5 h-5 text-yellow-400" />
+              </h2>
+              <p className="text-blue-400 mt-1">
+                Software Developer & Engineer
+              </p>
+            </div>
+
+            {/* Academic Information */}
+            <div className="py-6 border-b border-gray-700">
+              <h3 className="text-xl font-semibold text-blue-400 mb-4 flex items-center">
+                <GraduationCap className="mr-2" /> Academic Achievement
+              </h3>
+              <div className="grid grid-cols-3 gap-6">
+                <div className="bg-gray-800/50 p-4 rounded-lg">
+                  <p className="text-gray-400 text-sm">10th Percentage</p>
+                  <p className="text-2xl font-bold text-white">
+                    {xPercentage}%
+                  </p>
+                </div>
+                <div className="bg-gray-800/50 p-4 rounded-lg">
+                  <p className="text-gray-400 text-sm">12th Percentage</p>
+                  <p className="text-2xl font-bold text-white">
+                    {xiiPercentage}%
+                  </p>
+                </div>
+                <div className="bg-gray-800/50 p-4 rounded-lg">
+                  <p className="text-gray-400 text-sm">CGPA</p>
+                  <p className="text-2xl font-bold text-white">{cgpa}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Contact Information */}
+            <div className="py-6 border-b border-gray-700">
+              <h3 className="text-xl font-semibold text-blue-400 mb-4">
+                Contact Details
+              </h3>
+              <div className="space-y-4">
+                <div className="flex items-center space-x-3 text-gray-300">
+                  <Cake className="text-blue-400 w-5 h-5" />
+                  <span>{dob}</span>
+                </div>
+                <div className="flex items-center space-x-3 text-gray-300">
+                  <Phone className="text-blue-400 w-5 h-5" />
+                  <span>{phone}</span>
+                </div>
+                <div className="flex items-center space-x-3 text-gray-300">
+                  <Mail className="text-blue-400 w-5 h-5" />
+                  <span>{email}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Core Skills */}
+            <div className="pt-6">
+              <h3 className="text-xl font-semibold text-blue-400 mb-4 flex items-center">
+                <Settings className="mr-2" /> Core Skills
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {coreSkills &&
+                  coreSkills.map((skill, index) => (
+                    <span
+                      key={index}
+                      className="bg-blue-500/10 text-blue-300 px-4 py-2 rounded-full text-sm border border-blue-500/20 hover:bg-blue-500/20 transition-colors"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useWeb3Context } from "../context/useWeb3Context";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -278,6 +278,7 @@ function InterviewSession() {
   //     </div>
   //   );
   // }
+  const navigate = useNavigate();
 
   if (isLoading) {
     return (
@@ -420,6 +421,12 @@ function InterviewSession() {
                   )}
                 </button>
               </div>
+              <button
+                className="text-white border mt-3  hover:bg-red-600  border-red-600 rounded-md p-2"
+                onClick={() => navigate("/mock-interview-evaluation/" + id)}
+              >
+                End and Evaluate
+              </button>
             </div>
           )}
         </div>
